@@ -20,7 +20,7 @@ public class Expense {
     private String id;
     private String createdBy;
     private String title;
-    private int amount;
+    private Integer amount;
     private String description;
     private List<String> users;
 }

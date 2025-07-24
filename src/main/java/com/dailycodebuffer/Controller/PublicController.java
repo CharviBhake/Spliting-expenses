@@ -16,4 +16,9 @@ public class PublicController {
 
     @GetMapping("/health-check")
     public String HealthCheck(){return "OK";}
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "pong";
+    }
 }
