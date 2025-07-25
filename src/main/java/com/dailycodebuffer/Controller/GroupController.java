@@ -48,7 +48,7 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PutMapping("grpId/{grpId}/expense")
-    public ResponseEntity<?> addExpense(@PathVariable String grpId, @RequestBody Expense expenseRequest){
+    public ResponseEntity<List<Expense>> addExpense(@PathVariable String grpId, @RequestBody Expense expenseRequest){
         System.out.println("==== Inside getBalance method ====");
         Optional<Group> grp1=groupService.getGroup(grpId);
         Group grp2=grp1.orElse(null);
@@ -69,9 +69,10 @@ public class GroupController {
         System.out.println("Class of first user: " + expenseRequest.getUsers().get(0).getClass().getName());
 
         Expense expense = Expense.builder()
-                .description(expenseRequest.getDescription())
-                .amount(expenseRequest.getAmount())
                 .createdBy(username)
+                .title(expenseRequest.getTitle())
+                .amount(expenseRequest.getAmount())
+                .description(expenseRequest.getDescription())
                 .users(expenseRequest.getUsers())
                 .build();
         expenseService.SaveNewExpense(expense);
@@ -82,10 +83,11 @@ public class GroupController {
 
             if(grp2.getExpenseList()==null) grp2.setExpenseList(new ArrayList<>());
             grp2.getExpenseList().add(expense);
+            groupRepository.save(grp2);
             for(User user1:grp2.getUsers()){
                 balanceService.updateExpense(grp2,user1.getUsername());
             }
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(grp2.getExpenseList(),HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -121,11 +123,11 @@ public class GroupController {
         String userName=authentication.getName();
         Map<String,Integer> balance=balanceService.getBalance(grpId,userName);
         if(balance==null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        Map<String, Integer> result = new HashMap<>();
+      /*  Map<String, Integer> result = new HashMap<>();
         for (Map.Entry<String, Integer> entry : balance.entrySet()) {
             result.put(entry.getKey(), entry.getValue());  // or getEmail(), or getId()
-        }
-        return new ResponseEntity<>(result,HttpStatus.OK);
+        } */
+        return new ResponseEntity<>(balance,HttpStatus.OK);
     }
     @PutMapping("grpId/{grpId}/payment")
     public ResponseEntity<?> payment(@PathVariable String grpId, @RequestBody Payment payment){

@@ -35,7 +35,9 @@ public class BalanceService {
             e.printStackTrace();
         }
         Optional<Group> optionalGroup=groupService.getGroup(grpId);
-        if(optionalGroup.isEmpty()) return null;
+        if(optionalGroup.isEmpty()) {
+            return null;
+        }
 
         Group group=optionalGroup.get();
         Map<String,Integer> map=computerBalance(group,userName);
