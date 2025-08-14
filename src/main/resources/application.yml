@@ -6,8 +6,7 @@ spring:
       uri: mongodb+srv://charvibhake:2jjKeNUbF49AePX2@cluster0.ey1ambi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       database: expense_db
   redis:
-    host: localhost
-    port: 6379
+    uri: redis://default:hXaAceBy70DiyLt7LV3gq1pGJbQvWyxs@redis-16456.c212.ap-south-1-1.ec2.redns.redis-cloud.com:16456
   mail:
     host: smtp.gmail.com
     port: 587
